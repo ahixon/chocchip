@@ -33,7 +33,11 @@ config = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env']
+            presets: ['env'],
+            plugins: [
+              ["transform-react-jsx", { "pragma":"h" }],
+              'babel-plugin-transform-decorators-legacy'
+            ]
           }
         }
       }
