@@ -1,0 +1,32 @@
+{
+  "name": "chocchip",
+  "version": "1.0.0",
+  "description": "A cookie manager for Chrome.",
+  "main": "background.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "psl": "^1.1.22"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.17",
+    "copy-webpack-plugin": "^4.3.1",
+    "css-loader": "^0.28.8",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.10.1",
+    "webpack-merge": "^4.1.1",
+    "write-file-webpack-plugin": "^4.2.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Alex Hixon <alex@alexhixon.com>",
+  "license": "MIT"
+}

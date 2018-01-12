@@ -1,0 +1,25 @@
+{
+  "name": "Choc Chip",
+  "version": "1.0",
+  "description": "Fine-grained cookie management for websites",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "webNavigation",
+
+    "storage",
+    "cookies",
+
+    "<all_urls>"
+  ],
+
+  "background": {
+    "scripts": ["background.dist.js"]
+  },
+
+  "browser_action": {
+    "default_popup": "popup.dist.html"
+  },
+
+  "manifest_version": 2
+}

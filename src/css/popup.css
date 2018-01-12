@@ -1,0 +1,25 @@
+body {
+  width: 500px;
+}
+
+h2 {
+  border-bottom: 1px solid black;
+}
+
+h1 {
+  margin: 0px;
+  padding: 4px;
+  display: block;
+  background: black;
+  color: white;
+
+  font-size: 16px;
+}
+
+.event-groups {
+  display: flex;
+}
+
+.sent-group, .received-group {
+  flex: 1;
+}
