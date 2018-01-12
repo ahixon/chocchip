@@ -1,30 +1,35 @@
 const psl = require('psl');
+import { h, render, Component } from 'preact';
+
 import { getDomain } from './cookies.js';
 
 import './css/popup.css';
 
-class DomainHistory {
+class DomainHistory extends Component {
   constructor(domain_name) {
+    super();
     this.domain = domain_name;
 
-    this.cookieOrdering = new Set();
-    this.cookies = new Set();
+    // this.cookieOrdering = new Set();
+    // this.cookies = new Set();
   }
 
-  render() {
-    return `<h1>${this.domain}</h1>
-    <div class='event-groups'>
+  render({ domain }) {
+    return (<div>
+      <h1>{domain}</h1>
+        <div class='event-groups'>
 
-      <div class='received-group'>
-        <h2>Received</h2>
-        <ul class='received'></ul>
-      </div>
+        <div class='received-group'>
+          <h2>Received</h2>
+          <ul class='received'></ul>
+        </div>
 
-      <div class='sent-group'>
-        <h2>Sent</h2>
-        <ul class='sent'></ul>
+        <div class='sent-group'>
+          <h2>Sent</h2>
+          <ul class='sent'></ul>
+        </div>
       </div>
-    </div>`;
+    </div>);
   }
 }
 
@@ -96,15 +101,11 @@ class EventManager {
       this.visitedDomains.set(domainName, hist);
       this.domainOrdering.add(domainName);
 
-      let div = document.createElement('div');
-      div.classList.add('domainEvents');
-      div.innerHTML = hist.render();
-
       // store internal node
-      hist.node = div;
+      hist.node = render(<DomainHistory domain={domainName} />, this.logNode);
 
       // append to top
-      this.logNode.insertBefore(div, this.logNode.firstChild);  
+      // this.logNode.insertBefore(div, this.logNode.firstChild);  
     }
 
     return hist;
@@ -122,9 +123,9 @@ class EventManager {
     const elem = hist.node.getElementsByClassName(msg.source == 'server' ? 'received' : 'sent')[0];
 
     // new cookie
-    let li = document.createElement('li');
-    li.innerHTML = msg.cookie.name + ' = ' + msg.cookie.value;
-    elem.appendChild(li);
+    // let li = document.createElement('li');
+    // li.innerHTML = msg.cookie.name + ' = ' + msg.cookie.value;
+    // elem.appendChild(li);
   }
 }
 
@@ -137,9 +138,3 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   const manager = new EventManager(currTab.id, currTab.url);
   manager.connect();
 });
-
-if (module.hot) {
-  module.hot.accept('./popup.js', function() {
-    console.log('Accepting the updated popup module!');
-  })
-}

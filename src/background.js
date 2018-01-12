@@ -138,38 +138,34 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 //   });
 // });
 
-// listen for connections from a popup
-// and send any cookie updates out to it
-chrome.runtime.onConnect.addListener(function(port) {
+window.addEventListener('load', function() {
+  // listen for connections from a popup
+  // and send any cookie updates out to it
+  chrome.runtime.onConnect.addListener(function(port) {
 
-  port.onMessage.addListener(function(msg) {
-    if (msg.type == 'sync') {
-      const tabHistory = getTabHistory(msg.tabId);
+    port.onMessage.addListener(function(msg) {
+      if (msg.type == 'sync') {
+        const tabHistory = getTabHistory(msg.tabId);
 
-      tabHistory.port = port;
+        tabHistory.port = port;
 
-      // send all previous messages back
-      // console.log('connected');
+        // send all previous messages back
+        // console.log('connected');
 
-      for (const msg of tabHistory.messages) {
-        port.postMessage(msg);
+        for (const msg of tabHistory.messages) {
+          port.postMessage(msg);
+        }
+
+        // chrome.cookies.getAll({ url: msg.url }, function(cookies) {
+        //   for (const cookie of cookies) {
+        //     port.postMessage({type: 'new', source: 'store', cookie: cookie});
+        //   }
+        // });
+
+        port.onDisconnect.addListener(function() {
+          tabHistory.port = null;
+        });
       }
-
-      // chrome.cookies.getAll({ url: msg.url }, function(cookies) {
-      //   for (const cookie of cookies) {
-      //     port.postMessage({type: 'new', source: 'store', cookie: cookie});
-      //   }
-      // });
-
-      port.onDisconnect.addListener(function() {
-        tabHistory.port = null;
-      });
-    }
+    });
   });
 });
-
-if (module.hot) {
-  module.hot.accept('./background.js', function() {
-    console.log('Accepting the updated printMe module!');
-  })
-}
