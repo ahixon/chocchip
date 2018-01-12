@@ -14,9 +14,6 @@ let storeEnhancer = applyMiddleware(...storeMiddleware);
 if (module.hot) {
   // apply the remote redux devtools middleware
   // note: must be top-level enhancer
-
-  console.log('devset', process.env.DEV_SETTINGS);
-
   const remoteReduxDevtools = require('remote-redux-devtools');
   const debugEnhancer = remoteReduxDevtools.composeWithDevTools({
     hostname: process.env.DEV_SETTINGS.reduxDevtoolHost,
