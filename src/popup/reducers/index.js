@@ -19,4 +19,4 @@ const storeReducer = (state, action) => {
 const INITIAL_STORE = {counter: 0};
 
 export default (enhancer) =>
-  createStore(storeReducer, INITIAL_STORE, enhancer);
+  createStore(storeReducer, INITIAL_STORE, enhancer || undefined);
