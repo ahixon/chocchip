@@ -5,6 +5,6 @@
     <title>Hello</title>
   </head>
   <body>
-    <% if (webpackConfig.devServer) { %><script src="<%= htmlWebpackPlugin.options.reactDevtoolsUrl %>"></script><% } %>
+    <% if (process.env.NODE_ENV && process.env.NODE_ENV == 'development') { %><script src="<%= process.env.DEV_SETTINGS.reactDevtoolsUrl %>"></script><% } %>
   </body>
 </html>

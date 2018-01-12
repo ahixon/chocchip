@@ -5,7 +5,13 @@ const webpack = require('webpack');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = merge(config.baseconfig, {
+const devSettings = {
+  reactDevtoolsUrl: "http://localhost:8097/",
+  reduxDevtoolHost: "localhost",
+  reduxDevtoolPort: 8098
+};
+
+const devconfig = merge(config, {
   devtool: 'inline-source-map',
 
   devServer: {
@@ -18,6 +24,7 @@ module.exports = merge(config.baseconfig, {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('development'),
+        'DEV_SETTINGS': JSON.stringify(devSettings)
       }
     }),
 
@@ -31,7 +38,7 @@ module.exports = merge(config.baseconfig, {
 
           const csp = [
             ...(manifest.content_security_policy || []),
-            "script-src 'self' 'unsafe-eval' " + config.REACT_DEVTOOLS_URL,
+            "script-src 'self' 'unsafe-eval' " + devSettings.reactDevtoolsUrl,
             "object-src 'self'"
           ];
 
@@ -60,3 +67,8 @@ module.exports = merge(config.baseconfig, {
     new WriteFilePlugin()
   ]
 });
+
+module.exports = {
+  config: devconfig,
+  devSettings 
+}

@@ -18,6 +18,5 @@ const storeReducer = (state, action) => {
 
 const INITIAL_STORE = {counter: 0};
 
-export default () => createStore(storeReducer, INITIAL_STORE, 
-                                 window.__REDUX_DEVTOOLS_EXTENSION__ &&
-                                 window.__REDUX_DEVTOOLS_EXTENSION__());
+export default (enhancer) =>
+  createStore(storeReducer, INITIAL_STORE, enhancer);
