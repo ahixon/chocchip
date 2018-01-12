@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = merge(config, {
+module.exports = merge(config.baseconfig, {
   devtool: 'inline-source-map',
 
   devServer: {
@@ -14,6 +14,13 @@ module.exports = merge(config, {
   },
 
   plugins: [
+    // define NODE_ENV to be development for preact/debug
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('development'),
+      }
+    }),
+
     new CopyWebpackPlugin([
       {
         // copy manifest, but insert unsafe
@@ -24,7 +31,7 @@ module.exports = merge(config, {
 
           const csp = [
             ...(manifest.content_security_policy || []),
-            "script-src 'self' 'unsafe-eval'",
+            "script-src 'self' 'unsafe-eval' " + config.REACT_DEVTOOLS_URL,
             "object-src 'self'"
           ];
 

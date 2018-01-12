@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-module.exports = merge(config, {
+module.exports = merge(config.baseconfig, {
   plugins: [
     new CopyWebpackPlugin([
       {

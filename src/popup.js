@@ -138,3 +138,8 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   const manager = new EventManager(currTab.id, currTab.url);
   manager.connect();
 });
+
+if (module.hot) {
+  console.log('hot');
+  require('preact/debug');
+}

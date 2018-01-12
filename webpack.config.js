@@ -3,7 +3,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = {
+const REACT_DEVTOOLS_URL = "http://localhost:8097/";
+
+config = {
   entry: {
     background: './src/background.js',
     popup: './src/popup.js',
@@ -44,9 +46,15 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'popup.dist.html',
       template: 'src/popup.html',
-      chunks: ['popup']
+      chunks: ['popup'],
+      reactDevtoolsUrl: REACT_DEVTOOLS_URL
     }),
 
     new ExtractTextPlugin("[name].dist.css"),
   ]
+};
+
+module.exports = {
+  baseconfig: config,
+  REACT_DEVTOOLS_URL
 };
