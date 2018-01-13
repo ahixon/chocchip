@@ -110,11 +110,27 @@ class Cookie {
    * to display to users.
    *
    * It will return the exactly the domain if it is meant to
-   * match only that host, or prefixed with '*.' if it is
-   * allowed to match that domain, and any subdomains.
+   * match only that host, or prefixed if it is allowed to match that
+   * domain, and any subdomains.
+   *
+   * Prefix is "*." by default, since simply "." might be too confusing
+   * to users as to whether that's the value actually set by the cookie
+   * itself, or a value interpreted by the library.
    */ 
-  displayDomain(internetExplorer = false) {
-    
+  displayDomain(internetExplorer = false, prefix = "*.") {
+    let cookieDomain = this.normalisedCookieDomain;
+    if (internetExplorer) {
+      if (!cookieDomain) {
+        // FIXME: see comment in appliesTo
+        cookieDomain = this.requestDomain;
+      }
+    }
+
+    if (cookieDomain) {
+      return prefix + cookieDomain;
+    } else {
+      return this.requestDomain;
+    }
   }
 
   /**

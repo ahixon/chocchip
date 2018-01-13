@@ -95,5 +95,29 @@ describe('Cookie handling', () => {
       const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
       expect(cookie.normalisedCookieDomain).to.equal('domain.com');
     });
+
+    it('prefixes displayDomain with a wildcard for Domain cookies', () => {
+      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+      const cookie_dot = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+
+      expect(cookie_dot.displayDomain()).to.equal('*.domain.com')
+      expect(cookie.displayDomain()).to.equal('*.domain.com')
+    });
+
+    it('gives back the request domain on displayDomain for non-Domain cookies', () => {
+      const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
+      expect(cookie_www.displayDomain()).to.equal('www.domain.com')
+
+      const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
+      expect(cookie.displayDomain()).to.equal('domain.com')
+    });
+
+    it('prefixes displayDomain for non-Domain cookies when we are IE', () => {
+      const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
+      expect(cookie_www.displayDomain(true)).to.equal('*.www.domain.com')
+
+      const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
+      expect(cookie.displayDomain(true)).to.equal('*.domain.com')
+    });
   });
 });
