@@ -49,75 +49,81 @@ describe('Cookie handling', () => {
   });
   
   describe('Cookie', () => {
-    it('applies to cookies matching a Domain and subdomains', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
+    describe('#appliesTo', () => {
+      it('Domain -> all subdomains', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
 
-      expect(cookie.appliesTo("domain.com"), 'root domain').to.be.true;
-      expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.true;
-      expect(cookie.appliesTo("otherdomain.com"), 'other domain').to.be.false;
+        expect(cookie.appliesTo("domain.com"), 'root domain').to.be.true;
+        expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.true;
+        expect(cookie.appliesTo("otherdomain.com"), 'other domain').to.be.false;
+      });
+
+      it('Domain with . prefix -> subdomains ', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+
+        expect(cookie.appliesTo("domain.com"), 'root domain').to.be.true;
+        expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.true;
+        expect(cookie.appliesTo("otherdomain.com"), 'other domain').to.be.false;
+      });
+
+      it('Domain cannot apply to different domain', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
+        expect(cookie.appliesTo("xdomain.com")).to.be.false;
+      });
+
+      it('exactly on the hostname if no Domain is set', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1", 'http://www.domain.com/');
+        expect(cookie.appliesTo("xdomain.com"), 'other domain').to.be.false;
+        expect(cookie.appliesTo("domain.com"), 'root domain').to.be.false;
+        expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.false;
+        expect(cookie.appliesTo("www.domain.com"), 'url hostname').to.be.true;
+      });
+
+      it('domain + subdomains if no Domain and we are IE', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1", 'http://www.domain.com/');
+        expect(cookie.appliesTo("xdomain.com", true), 'other domain').to.be.false;
+        expect(cookie.appliesTo("domain.com", true), 'root domain').to.be.false;
+        expect(cookie.appliesTo("sub.www.domain.com", true), 'subdomain').to.be.true;
+        expect(cookie.appliesTo("www.domain.com", true), 'url hostname').to.be.true;
+      });
     });
 
-    it('applies to cookies matching a Domain with . prefix and subdomains ', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+    describe('normalises the cookie domain', () => {
+      it('for Domains without a . prefix', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
+        expect(cookie.normalisedCookieDomain).to.equal('domain.com');
+      });
 
-      expect(cookie.appliesTo("domain.com"), 'root domain').to.be.true;
-      expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.true;
-      expect(cookie.appliesTo("otherdomain.com"), 'other domain').to.be.false;
+      it('for Domains with a . prefix', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+        expect(cookie.normalisedCookieDomain).to.equal('domain.com');
+      });
     });
 
-    it('does not apply to cookies with a different host', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
-      expect(cookie.appliesTo("xdomain.com")).to.be.false;
-    });
+    describe('displayDomain', () => {
+      it('prefixes wildcard for Domain cookies', () => {
+        const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
+        const cookie_dot = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
 
-    it('only applies to cookies exactly on the hostname if no Domain is set', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1", 'http://www.domain.com/');
-      expect(cookie.appliesTo("xdomain.com"), 'other domain').to.be.false;
-      expect(cookie.appliesTo("domain.com"), 'root domain').to.be.false;
-      expect(cookie.appliesTo("sub.domain.com"), 'subdomain').to.be.false;
-      expect(cookie.appliesTo("www.domain.com"), 'url hostname').to.be.true;
-    });
+        expect(cookie_dot.displayDomain()).to.equal('*.domain.com')
+        expect(cookie.displayDomain()).to.equal('*.domain.com')
+      });
 
-    it('applies to domain and subdomains if no Domain is set and we are IE', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1", 'http://www.domain.com/');
-      expect(cookie.appliesTo("xdomain.com", true), 'other domain').to.be.false;
-      expect(cookie.appliesTo("domain.com", true), 'root domain').to.be.false;
-      expect(cookie.appliesTo("sub.www.domain.com", true), 'subdomain').to.be.true;
-      expect(cookie.appliesTo("www.domain.com", true), 'url hostname').to.be.true;
-    });
+      it('returns request domain for non-Domain cookies', () => {
+        const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
+        expect(cookie_www.displayDomain()).to.equal('www.domain.com')
 
-    it('normalises the domain for Domains without a . prefix', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=domain.com");
-      expect(cookie.normalisedCookieDomain).to.equal('domain.com');
-    });
+        const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
+        expect(cookie.displayDomain()).to.equal('domain.com')
+      });
 
-    it('normalises the domain for Domains with a . prefix', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
-      expect(cookie.normalisedCookieDomain).to.equal('domain.com');
-    });
+      it('prefixes wildcard for non-Domain when we are IE', () => {
+        const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
+        expect(cookie_www.displayDomain(true)).to.equal('*.www.domain.com')
 
-    it('prefixes displayDomain with a wildcard for Domain cookies', () => {
-      const cookie = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
-      const cookie_dot = Cookie.fromSetCookieHeader("a=1; Domain=.domain.com");
-
-      expect(cookie_dot.displayDomain()).to.equal('*.domain.com')
-      expect(cookie.displayDomain()).to.equal('*.domain.com')
-    });
-
-    it('gives back the request domain on displayDomain for non-Domain cookies', () => {
-      const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
-      expect(cookie_www.displayDomain()).to.equal('www.domain.com')
-
-      const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
-      expect(cookie.displayDomain()).to.equal('domain.com')
-    });
-
-    it('prefixes displayDomain for non-Domain cookies when we are IE', () => {
-      const cookie_www = Cookie.fromSetCookieHeader("a=1", "http://www.domain.com/");
-      expect(cookie_www.displayDomain(true)).to.equal('*.www.domain.com')
-
-      const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
-      expect(cookie.displayDomain(true)).to.equal('*.domain.com')
+        const cookie = Cookie.fromSetCookieHeader("a=1", "http://domain.com/");
+        expect(cookie.displayDomain(true)).to.equal('*.domain.com')
+      });
     });
   });
 });
