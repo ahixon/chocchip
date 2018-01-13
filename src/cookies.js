@@ -129,42 +129,6 @@ HeaderCookie.fromString = function(header_value, current_uri) {
   return new HeaderCookie(cookie_domain, name, value, attributes);
 }
 
-class TabHistory extends EventEmitter {
-  constructor(tabId) {
-    super();
-
-    this.tabId = tabId;
-    this.sentCookies = new Map();
-    this.receivedCookies = new Map();
-
-    this.messages = [];
-    this.port = null;
-    this.lastUrl = null;
-  }
-
-  addToHistory(message) {
-    this.messages.push(message);
-
-    if (this.port) {
-      this.port.postMessage(message);
-    }
-  }
-
-  setCookie(cookie, direction, time, initiator) {
-    this.receivedCookies.set(cookie.name, cookie);
-
-    this.addToHistory({
-      type: 'cookieChanged',
-      source: direction,
-      cookie: cookie,
-      time: time || new Date(),
-      initiator: initiator
-    });
-
-    this.emit('set', cookie);
-  }
-}
-
 function getBaseDomain(domain) {
   if (domain.indexOf('.') == 0) {
     return domain.slice(1);
@@ -173,4 +137,4 @@ function getBaseDomain(domain) {
   }
 }
 
-export { TabHistory, HeaderCookie, NormalisedHeaders, getDomain };
+export { HeaderCookie, NormalisedHeaders, getDomain };

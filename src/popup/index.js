@@ -3,7 +3,7 @@ import configureStore from './store.js';
 
 import './style.css';
 
-const store = configureStore({ counter: 5 });
+const store = configureStore({ counter: 0 });
 
 function renderRoot() {
   let App = require('./containers/App');

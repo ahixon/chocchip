@@ -1,7 +1,7 @@
 import responseHeaderListener from './responseHeaders';
 import navigationListener from './navigation';
 
-import { getTabHistory } from './utils';
+import { getTabHistory } from './tabhistory';
 
 // log all cookies being received from server
 chrome.webRequest.onHeadersReceived.addListener(responseHeaderListener,

@@ -1,5 +1,5 @@
 import { getDomain } from '../cookies.js'
-import { getTabHistory } from './utils';
+import { getTabHistory } from './tabhistory';
 
 // send a notification on each commited page change
 const NOTIFY_TRANSITIONS_ALWAYS = [

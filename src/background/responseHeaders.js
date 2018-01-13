@@ -1,5 +1,5 @@
 import { HeaderCookie, NormalisedHeaders } from '../cookies.js'
-import { getTabHistory } from './utils';
+import { getTabHistory } from './tabhistory';
 
 const reponseHeaderListener = function(details) {
   if (details.tabId == -1) {
