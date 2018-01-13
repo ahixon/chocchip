@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 
 const incrementCounter = (state) => {
   return {
-    counter: state.counter + 1
+    counter: (state.counter || 0) + 1
   };
 }
 
@@ -16,7 +16,4 @@ const storeReducer = (state, action) => {
   return state;
 }
 
-const INITIAL_STORE = {counter: 0};
-
-export default (enhancer) =>
-  createStore(storeReducer, INITIAL_STORE, enhancer || undefined);
+export default storeReducer;

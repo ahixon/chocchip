@@ -1,4 +1,4 @@
-import { HeaderCookie, NormalisedHeaders, TabHistory, getDomain } from './cookies.js'
+import { HeaderCookie, NormalisedHeaders, TabHistory, getDomain } from '../cookies.js'
 
 var tabHistories = new Map();
 
@@ -110,7 +110,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
   } else if (NOTIFY_TRANSITIONS_DIFFERENT_DOMAIN.indexOf(details.transitionType) != -1) {
     if (getDomain(tabHistory.lastUrl) != getDomain(details.url)) {
       tabHistory.addToHistory(historyObject);
-    }  
+    }
   }
 
   tabHistory.lastUrl = details.url;
@@ -138,6 +138,9 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 //   });
 // });
 
+if (module.hot) {
+  module.hot.accept();
+}
 
 // listen for connections from a popup
 // and send any cookie updates out to it
@@ -150,7 +153,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       tabHistory.port = port;
 
       // send all previous messages back
-      // console.log('connected');
+      console.log('connected');
 
       for (const msg of tabHistory.messages) {
         port.postMessage(msg);

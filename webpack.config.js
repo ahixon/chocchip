@@ -5,8 +5,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: {
-    background: './src/background.js',
-    popup: './src/popup.js',
+    background: './src/background/index.js',
+    popup: './src/popup/index.js',
   },
 
   output: {
@@ -48,7 +48,7 @@ module.exports = {
 
     new HtmlWebpackPlugin({
       filename: 'popup.dist.html',
-      template: 'src/popup.html',
+      template: 'src/popup/index.html',
       chunks: ['popup'],
     }),
 

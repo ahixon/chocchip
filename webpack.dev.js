@@ -8,11 +8,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const devSettings = {
   reactDevtoolsUrl: "http://localhost:8097/",
   reduxDevtoolHost: "localhost",
-  reduxDevtoolPort: 8098
+  reduxDevtoolPort: 8098,
+
+  devServerHost: 'localhost',
+  devServerPort: 8080
 };
 
 const devconfig = merge(config, {
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
 
   devServer: {
     // enable HMR for webpack-dev-server
@@ -61,6 +64,7 @@ const devconfig = merge(config, {
     // emit HMR chunks (so that the generated code will connect to
     // webpack-dev-server)
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
 
     // get webpack-dev-server to write out bundles to disk, rather than
     // generating it only in memory
