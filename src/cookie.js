@@ -4,7 +4,7 @@ class InvalidDomainError extends Error {
   constructor(params) {
     super(params);
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, CustomError);
+      Error.captureStackTrace(this, InvalidDomainError);
     }
   }
 }
@@ -13,9 +13,24 @@ class InvalidURLError extends Error {
   constructor(params) {
     super(params);
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, CustomError);
+      Error.captureStackTrace(this, InvalidURLError);
     }
   }
+}
+
+function getHostname(uri) {
+  uri = uri.split('/', 3);
+  if (uri[1] != "") {
+    return null;
+  }
+
+  const allowedProtocols = ["http:", "https:", "wss:", ""];
+
+  if (allowedProtocols.indexOf(uri[0].toLowerCase()) == -1) {
+    return null;
+  }
+
+  return uri[2];
 }
 
 function validDomainSuffix(domain, suffix) {
@@ -117,7 +132,11 @@ class Cookie {
     }
 
     const parsed = psl.parse(reqHostname);
-    return parsed.subdomain + parsed.domain;
+    if (parsed.subdomain) {
+      return parsed.subdomain + '.' + parsed.domain;
+    } else {
+      return parsed.domain;
+    }
   }
 
   /**
@@ -128,9 +147,6 @@ class Cookie {
    *    Explorer cookie matching behaviour.
    */
   appliesTo(testDomain, internetExplorer = false) {
-    const parsedRequestDomain = psl.parse(this.url);
-    const parsedRequestDomainValid = psl.isValid(domain);
-
     let cookieDomain = this.normalisedCookieDomain;
 
     if (internetExplorer) {
@@ -149,12 +165,12 @@ class Cookie {
       return validDomainSuffix(testDomain, cookieDomain);
     } else {
       // only to origin server, so domain must match exactly
-      return testDomain === cookieDomain;
+      return testDomain === this.requestDomain;
     }
   }
 
-  static fromSetCookieHeader(header, current_uri) {
-    const tags = Array.from(header_value.split(';'));
+  static fromSetCookieHeader(header_string, uri) {
+    const tags = Array.from(header_string.split(';'));
     let tags_kvArray = tags.map(tag => tag.split('=', 2));
 
     // remove the first item since it's the kv for the cookie itself
@@ -167,13 +183,14 @@ class Cookie {
     let attributes = new Map();
 
     for (const tag_kv of tags_kvArray) {
-      attributes.set(tag_kv[0].trim().toLowerCase(), tag_kv[1]);
+      const lowerKey = tag_kv[0].trim().toLowerCase();
+      attributes.set(lowerKey, tag_kv[1]);
     }
 
     // TODO: handle path attribute by extracting directory from uri
     // http://tools.ietf.org/html/rfc6265#section-4.1.2.4
 
-    return new HeaderCookie(cookie_domain, name, value, attributes);
+    return new Cookie(name, value, attributes, uri);
   }
 }
 
