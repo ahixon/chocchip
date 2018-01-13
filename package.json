@@ -35,7 +35,7 @@
   "scripts": {
     "start": "node server.js",
     "build": "webpack --config webpack.prod.js",
-    "test": "mocha-webpack src/**/*.spec.js --webpack-config webpack.prod.js"
+    "test": "mocha-webpack src/**/*.spec.js --webpack-config webpack.prod.js --watch"
   },
   "keywords": [],
   "author": "Alex Hixon <alex@alexhixon.com>",
