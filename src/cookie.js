@@ -65,12 +65,14 @@ class Cookie {
 
     // TODO: intercept access to attributes, and check
     // that any modifications to `domain` are valid domains
-    this.attributes = attributes || new Map();
+    this.attributes = Object.freeze(attributes || new Map());
     this.url = url;
 
     // TODO: check that domain is valid on construction
 
     this.source = source;
+
+    return Object.freeze(this);
   }
 
   /**
