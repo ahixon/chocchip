@@ -32,7 +32,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['env'],
+            presets: ['env', 'stage-3'],
             plugins: [
               ["transform-react-jsx", { "pragma":"h" }],
               'babel-plugin-transform-decorators-legacy',
