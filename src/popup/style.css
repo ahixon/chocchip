@@ -23,3 +23,7 @@ h1 {
 .sent-group, .received-group {
   flex: 1;
 }
+
+table {
+  width: 100%;
+}

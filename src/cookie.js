@@ -75,6 +75,12 @@ class Cookie {
     return Object.freeze(this);
   }
 
+  get isSession() {
+    return !(this.attributes.has('expires') || this.attributes.has('max-age'));
+  }
+
+  
+
   /**
    * Returns the normalised version of the cookie's Domain property.
    * 

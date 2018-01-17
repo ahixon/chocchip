@@ -1,5 +1,6 @@
-export function incrementCounter() {
+export function addCookie(cookie) {
   return {
-    type: 'INCREMENT_COUNTER',
+    type: 'ADD_COOKIE',
+    cookie: cookie
   };
 }

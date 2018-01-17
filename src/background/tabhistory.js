@@ -1,10 +1,10 @@
+import { EventEmitter } from '../cookies.js';
+
 class TabHistory extends EventEmitter {
   constructor(tabId) {
     super();
 
     this.tabId = tabId;
-    this.sentCookies = new Map();
-    this.receivedCookies = new Map();
 
     this.messages = [];
     this.port = null;
@@ -19,18 +19,16 @@ class TabHistory extends EventEmitter {
     }
   }
 
-  setCookie(cookie, direction, time, initiator) {
-    this.receivedCookies.set(cookie.name, cookie);
-
+  setCookie(header, direction, time, url) {
     this.addToHistory({
       type: 'cookieChanged',
       source: direction,
-      cookie: cookie,
+      header: header,
       time: time || new Date(),
-      initiator: initiator
+      url: url
     });
 
-    this.emit('set', cookie);
+    // this.emit('set', cookie);
   }
 }
 

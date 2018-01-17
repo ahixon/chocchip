@@ -1,19 +1,13 @@
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
+import policies from './policies';
+import cookieLog from './cookieLog';
 
-const incrementCounter = (state) => {
-  return {
-    counter: (state.counter || 0) + 1
-  };
-}
-
-const ACTIONS = {'INCREMENT_COUNTER': incrementCounter};
-
-const storeReducer = (state, action) => {
-  if (action && action.type && ACTIONS[action.type]) {
-    return ACTIONS[action.type](state, action)
-  }
-
+const filter = (state = '', action) => {
   return state;
 }
 
-export default storeReducer;
+export default combineReducers({
+  policies,
+  cookieLog,
+  filter,
+});

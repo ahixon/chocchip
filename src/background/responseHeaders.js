@@ -17,10 +17,11 @@ const reponseHeaderListener = function(details) {
     }
 
     // parse it from the header
-    let cookie = HeaderCookie.fromString(headerValue, details.url);
+    // let cookie = HeaderCookie.fromString(headerValue, details.url);
+    // TODO: check if matches any policies and apply them
 
     // keep it for this tab
-    tabHistory.setCookie(cookie, 'server', new Date(details.timeStamp), details.url);
+    tabHistory.setCookie(headerValue, 'server', new Date(details.timeStamp), details.url);
   }
 
   // return { responseHeaders: headers };

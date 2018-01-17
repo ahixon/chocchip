@@ -137,4 +137,4 @@ function getBaseDomain(domain) {
   }
 }
 
-export { HeaderCookie, NormalisedHeaders, getDomain };
+export { EventEmitter, HeaderCookie, NormalisedHeaders, getDomain };

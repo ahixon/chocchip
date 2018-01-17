@@ -19,10 +19,14 @@ chrome.webNavigation.onCommitted.addListener(navigationListener);
 chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(function(msg) {
     if (msg.type == 'sync') {
+      console.log('have sync');
       const tabHistory = getTabHistory(msg.tabId);
+
 
       tabHistory.port = port;
 
+      console.log('have history', tabHistory);
+      
       for (const msg of tabHistory.messages) {
         port.postMessage(msg);
       }

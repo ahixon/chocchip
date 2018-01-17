@@ -1,27 +1,22 @@
 import { h, Component } from 'preact';
 import { connect } from 'preact-redux';
-import { incrementCounter } from '../actions';
+
+import CookieLogItem from './CookieLogItem';
 
 const mapStateToProps = state => {
   return {
-    counter: state.counter
+    log: state.cookieLog
   }
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onCounterAdd: () => {
-      dispatch(incrementCounter());
-    }
-  }
-}
-
-@connect(mapStateToProps, mapDispatchToProps)
+@connect(mapStateToProps)
 export default class TabPopup extends Component {
-  render({ counter, onCounterAdd }) {
-    return (<div>
-            <p>Hello world! Counter is: { counter }</p>
-            <button onClick={onCounterAdd}>Add</button>
-            </div>);
+  render({ log }) {
+    const histories = log.order.map(domainNamePair => {
+      const [domain, name] = domainNamePair.split('; ', 2);
+      return (<CookieLogItem domain={domain} name={name} />);
+    });
+
+    return (<table>{ histories }</table>);
   }
 }
