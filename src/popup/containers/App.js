@@ -1,9 +1,9 @@
-import { h, Component } from 'preact';
+import React from 'react';
 import TabPopup from './TabPopup';
-import { Provider } from 'preact-redux';
+import { Provider } from 'react-redux';
 
-export default class App extends Component {
-  render({ store }) {
-    return (<Provider store={store}><TabPopup /></Provider>);
-  }  
+export default class App extends React.Component {
+  render() {
+    return (<Provider store={this.props.store}><TabPopup /></Provider>);
+  }
 }

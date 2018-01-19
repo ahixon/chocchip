@@ -34,7 +34,7 @@ module.exports = {
           options: {
             presets: ['env', 'stage-3'],
             plugins: [
-              ["transform-react-jsx", { "pragma":"h" }],
+              ["transform-react-jsx"],
               'babel-plugin-transform-decorators-legacy',
               ["babel-plugin-transform-builtin-extend", {
                   globals: ["Error"]

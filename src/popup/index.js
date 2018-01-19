@@ -1,4 +1,6 @@
-import { h, render } from 'preact';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import configureStore from './store.js';
 
 import './style.css';
@@ -12,17 +14,14 @@ function renderRoot() {
   let App = require('./containers/App');
   App = App.default || App;
 
-  document.rootElem = render(<App store={store} />,
-                             document.body, document.rootElem);
+  ReactDOM.render(<App store={store} />,
+                  document.getElementById('root'));
 }
 
 // do the initial render
 renderRoot();
 
 if (module.hot) {
-  // support react developer tools via preact
-  require('preact/debug');
-
   module.hot.accept();
   module.hot.accept('./containers/App', renderRoot);
 }

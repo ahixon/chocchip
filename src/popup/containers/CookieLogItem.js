@@ -1,5 +1,7 @@
-import { h, Component } from 'preact';
-import { connect } from 'preact-redux';
+import React from 'react';
+import { connect } from 'react-redux';
+
+import TableExpandable from '../components/Expandable';
 
 const mapStateToProps = state => {
   return {
@@ -8,9 +10,9 @@ const mapStateToProps = state => {
 };
 
 @connect(mapStateToProps)
-export default class CookieLogItem extends Component {
-  render({ cookieLog, domain, name }) {
-    const log = cookieLog[domain][name];
+export default class CookieLogItem extends React.Component {
+  render() {
+    const log = this.props.cookieLog[this.props.domain][this.props.name];
     const first = log.cookies[0];
 
     const type = log.cookies.reduce((acc, cookie) => {
@@ -27,11 +29,10 @@ export default class CookieLogItem extends Component {
       return acc;
     }, undefined);
 
-    return (<tr>
-      <td><span class='icon'>{ type }</span></td>
-      <td><span>{ first.name }</span></td>
-      <td><span>{ first.displayDomain() }</span></td>
-      <td><span>{ first.value }</span></td>
-    </tr>);
+    return (<TableExpandable expandTo={ first.value }>
+      <div className='col type'><span className='icon'>{ type }</span></div>
+      <div className='col'><span>{ first.name }</span></div>
+      <div className='col'><span>{ first.displayDomain() }</span></div>
+    </TableExpandable>);
   }
 }

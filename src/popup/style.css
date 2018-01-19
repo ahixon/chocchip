@@ -16,14 +16,40 @@ h1 {
   font-size: 16px;
 }
 
-.event-groups {
-  display: flex;
+.col {
+  float: left;
+  width: 32%;
+
+  overflow: hidden;
 }
 
-.sent-group, .received-group {
-  flex: 1;
+.row {
+  display: block;
 }
 
-table {
+.fullcol {
+  float: none;
+  display: block;
+  clear: left;
+}
+
+.expandable {
+  /*clear: left;*/
   width: 100%;
+
+  padding: 8px;
+}
+
+.history {
+  /*display: flex;*/
+  /*flex-flow: row wrap;*/
+  width: 100%;
+}
+
+.toggle {
+  width: 16px;
+}
+
+.col.type {
+  width: 15%;
 }
