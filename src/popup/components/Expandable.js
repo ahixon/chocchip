@@ -18,14 +18,21 @@ export default class TableExpandable extends React.Component {
     const { disabled, expandTo, children } = this.props;
     const { open } = this.state;
 
-    return (<div className='expandable'>
-      <a className='row' onClick={this.toggleExpand.bind(this)} href='#'>
-        <div className='col toggle'>{!open ? '>' : 'v' }</div>
-        { children }
-      </a>
-      <div className='fullcol' style={{'display': !open ? 'none' : ''}}>
-        { expandTo }
-      </div>
-    </div>);
+    return (<React.Fragment>
+            <tr>
+              <td>
+                <a className='row'
+                   onClick={this.toggleExpand.bind(this)}
+                   href='#'>{!open ? '>' : 'v' }
+                </a>
+              </td>
+
+              {this.props.children}
+            </tr>
+
+            <tr className='expandable' style={{'display': !open ? 'none' : ''}}>
+              <td colspan={this.props.children.length + 1}>{ expandTo }</td>
+            </tr>
+            </React.Fragment>);
   }
 }

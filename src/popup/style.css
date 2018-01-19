@@ -16,40 +16,10 @@ h1 {
   font-size: 16px;
 }
 
-.col {
-  float: left;
-  width: 32%;
-
-  overflow: hidden;
-}
-
-.row {
-  display: block;
-}
-
-.fullcol {
-  float: none;
-  display: block;
-  clear: left;
-}
-
-.expandable {
-  /*clear: left;*/
-  width: 100%;
-
-  padding: 8px;
-}
-
-.history {
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
+table {
   width: 100%;
 }
 
-.toggle {
-  width: 16px;
-}
-
-.col.type {
-  width: 15%;
+.expandable td {
+  padding-bottom: 1em;
 }

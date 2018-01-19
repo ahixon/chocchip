@@ -17,6 +17,6 @@ export default class TabPopup extends React.Component {
       return (<CookieLogItem key={domainNamePair} domain={domain} name={name} />);
     });
 
-    return (<div className='history'>{ histories }</div>);
+    return (<table className='history'>{ histories }</table>);
   }
 }
