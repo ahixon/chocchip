@@ -20,6 +20,26 @@ table {
   width: 100%;
 }
 
-.expandable td {
-  padding-bottom: 1em;
+.expandable-row {
+  cursor: pointer;
+}
+
+.expandable-content td {
+  background-color: #eee;
+}
+
+.expandable-opener.closed::before {
+  content: '\25B6';
+}
+
+.expandable-row:hover .expandable-opener.closed::before {
+  content: '\25B7';
+}
+
+.expandable-opener.open::before {
+  content: '\25BC';
+}
+
+.expandable-row:hover .expandable-opener.open::before {
+  content: '\25BD';
 }
