@@ -43,3 +43,8 @@ table {
 .expandable-row:hover .expandable-opener.open::before {
   content: '\25BD';
 }
+
+pre {
+  overflow-x: auto;
+  width: 500px;
+}

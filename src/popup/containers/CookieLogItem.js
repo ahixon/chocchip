@@ -29,7 +29,8 @@ export default class CookieLogItem extends React.Component {
       return acc;
     }, undefined);
 
-    return (<TableExpandable expandTo={ first.value }>
+    const expanded = <pre>{ first.value }</pre>;
+    return (<TableExpandable expandTo={ expanded }>
               <td>{type}</td>
               <td>{first.name}</td>
               <td>{first.displayDomain()}</td>

@@ -25,7 +25,7 @@ export default class TableExpandable extends React.Component {
             </tr>
 
             <tr className='expandable-content' style={{'display': !open ? 'none' : ''}}>
-              <td colspan={this.props.children.length + 1}>{ expandTo }</td>
+              <td colSpan={this.props.children.length + 1}>{ expandTo }</td>
             </tr>
             </React.Fragment>);
   }
